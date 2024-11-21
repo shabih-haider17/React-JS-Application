@@ -1,7 +1,7 @@
 import Message from "./Message";
 import Button from "./components/Button";
 import ListGroup from "./components/ListGroup";
-import Alert from "./components/alert";
+import Alert from "./components/Alert";
 function App() {
   let items = ["Karachi", "Lahore", "Peshawar", "Quetta", "Islamabad"];
   const handleSelectItem = (item: string) => {
