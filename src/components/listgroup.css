@@ -2,4 +2,8 @@ li{
     list-style: none;
     padding: 110px;
     text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    width: 50%;
+    margin-left: 25%;
+    border-radius: 3px solid blue;
 }
