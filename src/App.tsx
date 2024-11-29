@@ -15,9 +15,24 @@ function App() {
     SetVisiblity(true);
     console.log(isVisible);
   };
+  const [drink, setDrink] = useState({
+    title: "Capuccino",
+    price: 5,
+  });
+
+  const handleClick2 = () => {
+    const newDrink = {
+      title: "Capuccino",
+      price: 6, // Update the price
+    };
+    setDrink(newDrink); // Update the state
+  };
+
   return (
     <div>
       <Message></Message>
+      {/* <Message></Message>
+      <Message></Message> */}
       <h4>List Component</h4>
       <ListGroup
         items={items}
@@ -35,6 +50,8 @@ function App() {
       <br />
       <br />
       <button onClick={handleClick}>Show</button>
+      <p>{drink.price}</p> {/* Display the current price */}
+      <button onClick={handleClick2}>Click Me</button>
     </div>
   );
 }
