@@ -9,6 +9,12 @@ function App() {
     console.log(item);
   };
   const [alertvisible, Setalertvisiblity] = useState(false);
+
+  const [isVisible, SetVisiblity] = useState(false);
+  const handleClick = () => {
+    SetVisiblity(true);
+    console.log(isVisible);
+  };
   return (
     <div>
       <Message></Message>
@@ -26,6 +32,9 @@ function App() {
       )}
       <h4>Button Component</h4>
       <Button OnClick={() => Setalertvisiblity(true)}>My Button</Button>
+      <br />
+      <br />
+      <button onClick={handleClick}>Show</button>
     </div>
   );
 }
