@@ -22,10 +22,26 @@ function App() {
 
   const handleClick2 = () => {
     const newDrink = {
-      title: "Capuccino",
-      price: 6, // Update the price
+      ...drink,
+      price: 10, // Update the price
     };
     setDrink(newDrink); // Update the state
+  };
+  const [customer, SetCustomer] = useState({
+    name: "Shabih",
+    address: {
+      city: "Karachi",
+      zipcode: 79905,
+    },
+  });
+  const handleClick3 = () => {
+    SetCustomer({
+      ...customer,
+      address: {
+        ...customer.address,
+        zipcode: 79912,
+      },
+    });
   };
 
   return (
