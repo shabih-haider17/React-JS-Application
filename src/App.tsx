@@ -23,7 +23,7 @@ function App() {
   const handleClick2 = () => {
     const newDrink = {
       ...drink,
-      price: 10, // Update the price
+      price: 15, // Update the price
     };
     setDrink(newDrink); // Update the state
   };
@@ -36,12 +36,31 @@ function App() {
   });
   const handleClick3 = () => {
     SetCustomer({
-      ...customer,
+      name: "Shazil",
       address: {
         ...customer.address,
         zipcode: 79912,
+        city: "Lahore",
       },
     });
+  };
+  const [tags, setTags] = useState(["happy", "cheerful"]);
+  const handleClick4 = () => {
+    setTags((prevTags) => {
+      let updatedTags = [...prevTags, "exciting"]; // Add "exciting"
+      updatedTags = updatedTags.filter((tag) => tag !== "happy"); // Remove "happy"
+      updatedTags = updatedTags.map((tag) =>
+        tag === "cheerful" ? "cheering" : tag
+      ); // Replace "cheerful" with "cheering"
+      return updatedTags;
+    });
+  };
+  const [bugs, setBugs] = useState([
+    { id: 1, title: "Bug1", fixed: false },
+    { id: 2, title: "Bug2", fixed: false },
+  ]);
+  const handleClick5 = () => {
+    setBugs(bugs.map((bug) => (bug.id === 1 ? { ...bug, fixed: true } : bug)));
   };
 
   return (
@@ -68,6 +87,22 @@ function App() {
       <button onClick={handleClick}>Show</button>
       <p>{drink.price}</p> {/* Display the current price */}
       <button onClick={handleClick2}>Click Me</button>
+      <p>
+        Name:{customer.name}
+        <br />
+        City: {customer.address.city}
+        <br />
+        Zipcode: {customer.address.zipcode}
+      </p>
+      <button onClick={handleClick3}>Click Me</button>
+      {tags.map((tag, index) => (
+        <p key={index}>{tag}</p>
+      ))}
+      <button onClick={handleClick4}>Update Tags</button>
+      <br />
+      {bugs[0].title} - {bugs[0].fixed ? "Fixed" : "Not Fixed"} <br />
+      {bugs[1].title} - {bugs[1].fixed ? "Fixed" : "Not Fixed"} <br />
+      <button onClick={handleClick5}>Fix Bug 1</button>
     </div>
   );
 }
