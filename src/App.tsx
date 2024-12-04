@@ -3,6 +3,7 @@ import Button from "./components/Button";
 import ListGroup from "./components/ListGroup";
 import Alert from "./components/Alert";
 import { useState } from "react";
+import produce from "immer";
 function App() {
   let items = ["Karachi", "Lahore", "Peshawar", "Quetta", "Islamabad"];
   const handleSelectItem = (item: string) => {
@@ -60,7 +61,12 @@ function App() {
     { id: 2, title: "Bug2", fixed: false },
   ]);
   const handleClick5 = () => {
-    setBugs(bugs.map((bug) => (bug.id === 1 ? { ...bug, fixed: true } : bug)));
+    setBugs(
+      produce((draft) => {
+        const bug = draft.find((bug) => bug.id === 1);
+        if (bug) bug.fixed = true;
+      })
+    );
   };
 
   return (
@@ -100,8 +106,11 @@ function App() {
       ))}
       <button onClick={handleClick4}>Update Tags</button>
       <br />
-      {bugs[0].title} - {bugs[0].fixed ? "Fixed" : "Not Fixed"} <br />
-      {bugs[1].title} - {bugs[1].fixed ? "Fixed" : "Not Fixed"} <br />
+      {bugs.map((bug) => (
+        <p key={bug.id}>
+          {bug.title} {bug.fixed ? "Fixed" : "New"}
+        </p>
+      ))}
       <button onClick={handleClick5}>Fix Bug 1</button>
     </div>
   );
