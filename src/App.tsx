@@ -4,6 +4,8 @@ import ListGroup from "./components/ListGroup";
 import Alert from "./components/Alert";
 import { useState } from "react";
 import produce from "immer";
+import { useEffect, useRef } from "react";
+import ProductLists from "./components/ProductLists";
 function App() {
   let items = ["Karachi", "Lahore", "Peshawar", "Quetta", "Islamabad"];
   const handleSelectItem = (item: string) => {
@@ -68,6 +70,15 @@ function App() {
       })
     );
   };
+  const ref = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (ref.current) ref.current.focus();
+  });
+  useEffect(() => {
+    document.title = "My App";
+  });
+  const [category, setCategory] = useState("");
 
   return (
     <div>
@@ -112,6 +123,21 @@ function App() {
         </p>
       ))}
       <button onClick={handleClick5}>Fix Bug 1</button>
+      <br />
+      <br />
+      <input type="text" className="form-control" />
+      <br />
+      <select
+        name=""
+        id=""
+        className="form-select"
+        onChange={(event) => setCategory(event.target.value)}
+      >
+        <option value=""></option>
+        <option value="Clothing">Clothing</option>
+        <option value="Household">Household</option>
+      </select>
+      <ProductLists />
     </div>
   );
 }
