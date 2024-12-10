@@ -6,6 +6,16 @@ import { useState } from "react";
 import produce from "immer";
 import { useEffect, useRef } from "react";
 import ProductLists from "./components/ProductLists";
+import axios, { CanceledError } from "axios";
+
+const connect = () => console.log("Connecting...");
+
+const disconnect = () => console.log("Disconnecting...");
+
+interface User {
+  id: number;
+  name: string;
+}
 function App() {
   let items = ["Karachi", "Lahore", "Peshawar", "Quetta", "Islamabad"];
   const handleSelectItem = (item: string) => {
@@ -80,11 +90,49 @@ function App() {
   });
   const [category, setCategory] = useState("");
 
+  useEffect(() => {
+    connect();
+
+    return () => disconnect();
+  });
+  const [users, SetUsers] = useState<User[]>([]);
+  const [error, SetError] = useState("");
+  const [isLoading, SetLoading] = useState(false);
+  useEffect(() => {
+    const controller = new AbortController();
+
+    SetLoading(true);
+    axios
+      .get<User[]>("https://jsonplaceholder.typicode.com/users", {
+        signal: controller.signal,
+      })
+      .then((res) => {
+        SetUsers(res.data);
+        SetLoading(false);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        SetError(err.message);
+        SetLoading(false);
+      });
+
+    return () => controller.abort();
+  }, []);
+
+  const deleteUser = (user: User) => {
+    const OriginalUsers = [...users];
+    SetUsers(users.filter((u) => u.id !== user.id));
+
+    axios
+      .delete("https://jsonplaceholder.typicode.com/users" + user.id)
+      .catch((err) => {
+        SetError(err.message);
+        SetUsers(OriginalUsers);
+      });
+  };
   return (
     <div>
       <Message></Message>
-      {/* <Message></Message>
-      <Message></Message> */}
       <h4>List Component</h4>
       <ListGroup
         items={items}
@@ -138,6 +186,24 @@ function App() {
         <option value="Household">Household</option>
       </select>
       <ProductLists />
+      {error && <p className="text-danger">{error}</p>}
+      {isLoading && <div className="spinner-booter"></div>}
+      <ul className="list-group">
+        {users.map((user) => (
+          <li
+            key={user.id}
+            className="list-group-item d-flex justify-content-between"
+          >
+            {user.name}
+            <button
+              className="btn btn-outline-danger"
+              onClick={() => deleteUser(user)}
+            >
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
