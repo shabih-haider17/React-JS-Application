@@ -1,33 +1,33 @@
+import React, { useState, useEffect, useRef } from "react";
+import axios, { CanceledError } from "axios";
+import produce from "immer";
 import Message from "./Message";
 import Button from "./components/Button";
 import ListGroup from "./components/ListGroup";
 import Alert from "./components/Alert";
-import { useState } from "react";
-import produce from "immer";
-import { useEffect, useRef } from "react";
 import ProductLists from "./components/ProductLists";
-import axios, { CanceledError } from "axios";
 
 const connect = () => console.log("Connecting...");
-
 const disconnect = () => console.log("Disconnecting...");
 
 interface User {
   id: number;
   name: string;
 }
+
 function App() {
   let items = ["Karachi", "Lahore", "Peshawar", "Quetta", "Islamabad"];
   const handleSelectItem = (item: string) => {
     console.log(item);
   };
-  const [alertvisible, Setalertvisiblity] = useState(false);
 
+  const [alertvisible, Setalertvisiblity] = useState(false);
   const [isVisible, SetVisiblity] = useState(false);
   const handleClick = () => {
     SetVisiblity(true);
     console.log(isVisible);
   };
+
   const [drink, setDrink] = useState({
     title: "Capuccino",
     price: 5,
@@ -40,6 +40,7 @@ function App() {
     };
     setDrink(newDrink); // Update the state
   };
+
   const [customer, SetCustomer] = useState({
     name: "Shabih",
     address: {
@@ -47,6 +48,7 @@ function App() {
       zipcode: 79905,
     },
   });
+
   const handleClick3 = () => {
     SetCustomer({
       name: "Shazil",
@@ -57,6 +59,7 @@ function App() {
       },
     });
   };
+
   const [tags, setTags] = useState(["happy", "cheerful"]);
   const handleClick4 = () => {
     setTags((prevTags) => {
@@ -68,10 +71,12 @@ function App() {
       return updatedTags;
     });
   };
+
   const [bugs, setBugs] = useState([
     { id: 1, title: "Bug1", fixed: false },
     { id: 2, title: "Bug2", fixed: false },
   ]);
+
   const handleClick5 = () => {
     setBugs(
       produce((draft) => {
@@ -80,24 +85,28 @@ function App() {
       })
     );
   };
-  const ref = useRef<HTMLInputElement>(null);
 
+  const ref = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (ref.current) ref.current.focus();
   });
+
   useEffect(() => {
     document.title = "My App";
   });
+
   const [category, setCategory] = useState("");
 
   useEffect(() => {
     connect();
-
     return () => disconnect();
   });
+
+  // API Data Binding
   const [users, SetUsers] = useState<User[]>([]);
   const [error, SetError] = useState("");
   const [isLoading, SetLoading] = useState(false);
+
   useEffect(() => {
     const controller = new AbortController();
 
@@ -124,42 +133,47 @@ function App() {
     SetUsers(users.filter((u) => u.id !== user.id));
 
     axios
-      .delete("https://jsonplaceholder.typicode.com/users" + user.id)
+      .delete("https://jsonplaceholder.typicode.com/users/" + user.id)
       .catch((err) => {
         SetError(err.message);
         SetUsers(OriginalUsers);
       });
   };
+
   return (
     <div>
-      <Message></Message>
+      <Message />
       <h4>List Component</h4>
       <ListGroup
         items={items}
         heading={"Cities Of Pakistan"}
         onSelectitem={handleSelectItem}
       />
+
       <h4>Alert Component</h4>
       {alertvisible && (
         <Alert onClose={() => Setalertvisiblity(false)}>
-          !!MY BUTTON!!<br></br>
+          !!MY BUTTON!!
+          <br />
         </Alert>
       )}
+
       <h4>Button Component</h4>
       <Button OnClick={() => Setalertvisiblity(true)}>My Button</Button>
       <br />
       <br />
       <button onClick={handleClick}>Show</button>
-      <p>{drink.price}</p> {/* Display the current price */}
+      <p>{drink.price}</p>
       <button onClick={handleClick2}>Click Me</button>
       <p>
-        Name:{customer.name}
+        Name: {customer.name}
         <br />
         City: {customer.address.city}
         <br />
         Zipcode: {customer.address.zipcode}
       </p>
       <button onClick={handleClick3}>Click Me</button>
+
       {tags.map((tag, index) => (
         <p key={index}>{tag}</p>
       ))}
@@ -186,8 +200,12 @@ function App() {
         <option value="Household">Household</option>
       </select>
       <ProductLists />
+
       {error && <p className="text-danger">{error}</p>}
       {isLoading && <div className="spinner-booter"></div>}
+      <br />
+      <h3>Json API List</h3>
+      <br />
       <ul className="list-group">
         {users.map((user) => (
           <li
